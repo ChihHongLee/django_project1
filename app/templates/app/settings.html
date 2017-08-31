@@ -1,0 +1,85 @@
+{% load staticfiles%}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+
+    <title>Dashboard Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <!-- 寫死的方法    <link href="static/css/bootstrap.min.css" rel="stylesheet">  -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="{% static 'dashboard.css' %}" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">My Project</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/accounts/logout">Logout</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js"></script>
+    <script>
+      $(function(){
+        $('#datepicker1').datepicker({
+          format:'yyyy-mm-dd'
+        });
+      })
+    </script>
+  </body>
+</html>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-3 col-md-2 sidebar">
+      <li class="item-bar"><a href="/">帳務總覽</a></li>
+      <li class="item-bar active"><a href="/settings">分類設定</a></li>
+      <li><a href="/accounts/logout">登出</a></li>
+    </div>
+  </div>
+</div>
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+  <h3 class="page-header">分類設定</h3>
+  <form action="/add_category"  method="post">
+  {% csrf_token %}
+    <input type="text" name="add_category">
+    <input type="submit" value="新增分類" class="btn show-new-item">
+  </form>
+	<table class="table table-scrollable">
+	  <thead>
+	     <tr>
+	      <th>分類</th>
+	    </tr>
+	  </thead>
+	  <tbody>
+      {% for category in categories %}
+
+      <td>
+        {{ category}}
+        <form method="post" action="/delete_category">
+          {% csrf_token %}
+          <input type="hidden" value="{{category.category}}" name="delete_category">
+          <input type="submit" class="btn" value="刪除">
+        </form>
+      </td>
+
+      {% endfor %}
+	  </tbody>
+	</table>
+</div>
